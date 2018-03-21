@@ -129,7 +129,14 @@ class CtaEngine(object):
             
         self.writeCtaLog(u'策略%s发送委托，%s，%s，%s@%s' 
                          %(strategy.name, vtSymbol, req.direction, volume, price))
-        
+        flt = {'name': strategy.name,
+                   'vtSymbol': strategy.vtSymbol}
+        d = copy(flt)         
+        d['order_time'] = datetime.now()
+        d['direction'] =  req.direction
+        d['volume'] = volume
+        d['price'] = price
+        self.mainEngine.dbInsert(ORDER_DB_NAME, strategy.name,d)#记录每次下单的情况            
         return vtOrderIDList
     
     #----------------------------------------------------------------------
