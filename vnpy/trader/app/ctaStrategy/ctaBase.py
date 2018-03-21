@@ -25,6 +25,7 @@ STOPORDERPREFIX = 'CtaStopOrder.'
 # 数据库名称
 SETTING_DB_NAME = 'VnTrader_Setting_Db'
 POSITION_DB_NAME = 'VnTrader_Position_Db'
+ORDER_DB_NAME = 'VnTrader_Order_Db'
 
 TICK_DB_NAME = 'VnTrader_Tick_Db'
 DAILY_DB_NAME = 'VnTrader_Daily_Db'
