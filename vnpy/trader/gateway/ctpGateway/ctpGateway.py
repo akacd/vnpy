@@ -11,7 +11,7 @@ vtSymbol直接使用symbol
 import os
 import json
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,time as tm
 
 from vnpy.api.ctp import MdApi, TdApi, defineDict
 from vnpy.trader.vtGateway import *
@@ -355,7 +355,30 @@ class CtpMdApi(MdApi):
         symbol = data['InstrumentID']
         if symbol not in symbolExchangeDict:
             return
-        
+        # print(type(data['UpdateTime']),data['UpdateTime'])
+        time_now = datetime.strptime(data['UpdateTime'],'%X').time()
+        #reconnect ctp
+        if time_now >= tm(8,50,1) and time_now <= tm(8,50,2):
+            self.gateway.connect()
+        if time_now >= tm(20,50,1) and time_now <= tm(20,50,2):
+            self.gateway.connect()
+        #end of reconnect
+        if 'rb' in data['InstrumentID']:
+    
+            if time_now < tm(9, 00) or time_now >= tm(23,00): 
+                return
+            elif time_now >= tm(10,15) and time_now < tm(10,30):
+                return            
+            elif time_now >= tm(11,30) and time_now < tm(13,30):
+                return
+            elif time_now >= tm(15,00) and time_now < tm(21,00):
+                return          
+    
+        if 'I' in data['InstrumentID']:
+            if time_now < tm(9, 30) or time_now > tm(15,00,1): 
+                return
+            elif time_now > tm(11,30,1) and time_now < tm(13,00):
+                return        
         # 创建对象
         tick = VtTickData()
         tick.gatewayName = self.gatewayName
